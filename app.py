@@ -2,9 +2,10 @@ from dash import Dash, dcc, html
 import plotly.express as px
 import pandas as pd
 from pathlib import Path
+from urllib.parse import quote
 
 app = Dash(__name__)
-DATA_DIR = Path("https://raw.githubusercontent.com/Yiqing-Wang-05/infosci301_final_project/main/")
+DATA_DIR = "https://github.com/Yiqing-Wang-05/infosci301_final_project/raw/refs/heads/main"
 
 # --- World Bank Data Loader ---
 def read_wb(url: str, var_name: str) -> pd.DataFrame:
@@ -27,14 +28,15 @@ def read_wb(url: str, var_name: str) -> pd.DataFrame:
 
 # Load data
 gdp   = read_wb(f"{DATA_DIR}/GDP.xlsx",       "GDP_USD")
-edu   = read_wb(DATA_DIR/"Government expenditure on education as % of GDP (%).xlsx", "Edu_pct_GDP")
-urban = read_wb(DATA_DIR/"Urban population (% of total population).xlsx", "Urban_pct")
+# https://github.com/Yiqing-Wang-05/infosci301_final_project/raw/refs/heads/main/Government%20expenditure%20on%20education%20as%20%25%20of%20GDP%20(%25).xlsx
+edu   = read_wb(f"{DATA_DIR}/Government%20expenditure%20on%20education%20as%20%25%20of%20GDP%20(%25).xlsx", "Edu_pct_GDP")
+urban = read_wb(f"{DATA_DIR}/{quote('Urban population (% of total population).xlsx')}", "Urban_pct")
 
-country_map = pd.read_excel(DATA_DIR/"OPRI_COUNTRY.xlsx").rename(columns={
+country_map = pd.read_excel(f"{DATA_DIR}/OPRI_COUNTRY.xlsx").rename(columns={
     "COUNTRY_ID": "Country Code", "COUNTRY_NAME_EN": "Country"
 })
 
-raw = pd.read_excel(DATA_DIR/"inbound and outbound of international students.xlsx", sheet_name="data")
+raw = pd.read_excel(f"{DATA_DIR}/{quote('inbound and outbound of international students.xlsx')}", sheet_name="data")
 flows = {26637: "Inbound", 26519: "Outbound"}
 
 mig = (
