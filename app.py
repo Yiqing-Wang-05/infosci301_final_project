@@ -7,23 +7,26 @@ app = Dash(__name__)
 DATA_DIR = Path("https://raw.githubusercontent.com/Yiqing-Wang-05/infosci301_final_project/main/")
 
 # --- World Bank Data Loader ---
-def read_wb(path: Path, var_name: str) -> pd.DataFrame:
-    xls = pd.ExcelFile(path)
-    df = pd.read_excel(xls, sheet_name=xls.sheet_names[0], header=None)
+def read_wb(url: str, var_name: str) -> pd.DataFrame:
+    print(url)
+    df = pd.read_excel(url, header=None)
     df.columns = df.iloc[4]
     df = df.iloc[5:].rename(columns={
         df.columns[0]: "Country",
         df.columns[1]: "Country Code"
     })
-    df = df.melt(id_vars=["Country","Country Code"], var_name="Year", value_name=var_name)
+    df = df.melt(
+        id_vars=["Country", "Country Code"],
+        var_name="Year",
+        value_name=var_name
+    )
     df["Year"] = pd.to_numeric(df["Year"], errors="coerce").astype("Int64")
     df[var_name] = pd.to_numeric(df[var_name], errors="coerce")
     return df.dropna(subset=["Year"])
 
 
-
 # Load data
-gdp   = read_wb(DATA_DIR/"GDP.xlsx",       "GDP_USD")
+gdp   = read_wb(f"{DATA_DIR}/GDP.xlsx",       "GDP_USD")
 edu   = read_wb(DATA_DIR/"Government expenditure on education as % of GDP (%).xlsx", "Edu_pct_GDP")
 urban = read_wb(DATA_DIR/"Urban population (% of total population).xlsx", "Urban_pct")
 
