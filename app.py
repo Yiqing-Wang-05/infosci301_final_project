@@ -4,7 +4,7 @@ import pandas as pd
 from pathlib import Path
 
 app = Dash(__name__)
-DATA_DIR = Path("./")
+DATA_DIR = Path("https://github.com/Yiqing-Wang-05/infosci301_final_project/")
 
 # --- World Bank Data Loader ---
 def read_wb(path: Path, var_name: str) -> pd.DataFrame:
