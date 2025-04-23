@@ -4,7 +4,7 @@ import pandas as pd
 from pathlib import Path
 
 app = Dash(__name__)
-DATA_DIR = Path("https://github.com/Yiqing-Wang-05/infosci301_final_project/")
+DATA_DIR = Path("https://raw.githubusercontent.com/Yiqing-Wang-05/infosci301_final_project/main/")
 
 # --- World Bank Data Loader ---
 def read_wb(path: Path, var_name: str) -> pd.DataFrame:
@@ -19,6 +19,8 @@ def read_wb(path: Path, var_name: str) -> pd.DataFrame:
     df["Year"] = pd.to_numeric(df["Year"], errors="coerce").astype("Int64")
     df[var_name] = pd.to_numeric(df[var_name], errors="coerce")
     return df.dropna(subset=["Year"])
+
+
 
 # Load data
 gdp   = read_wb(DATA_DIR/"GDP.xlsx",       "GDP_USD")
